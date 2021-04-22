@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  mt-api:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+      - 5555:5555
+    volumes:
+      - ./:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - mt-db
+
+  mt-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

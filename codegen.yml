@@ -1,0 +1,8 @@
+overwrite: true
+schema: "http://localhost:3000"
+documents: null
+generates:
+  ./app/generated/backend.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
