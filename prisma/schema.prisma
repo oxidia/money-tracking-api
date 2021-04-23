@@ -11,7 +11,7 @@ model User {
   id       Int       @id @default(autoincrement())
   email    String    @unique @db.VarChar(255)
   password String    @db.VarChar(255)
-  acounts  Account[]
+  accounts Account[]
 }
 
 model Account {
@@ -38,7 +38,7 @@ model Expense {
 model Income {
   id     Int    @id @default(autoincrement())
   amount Int
-  souce  String @db.VarChar(255)
+  source String @db.VarChar(255)
 
   account   Account? @relation(fields: [accountId], references: [id])
   accountId Int?
