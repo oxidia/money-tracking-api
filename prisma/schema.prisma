@@ -8,7 +8,51 @@ generator client {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @db.VarChar(255)
-  password String @db.VarChar(255)
+  id        Int       @id @default(autoincrement())
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  accounts  Account[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map(name: "users")
+}
+
+model Account {
+  id            Int       @id @default(autoincrement())
+  bankName      String    @db.VarChar(255)
+  accountNumber Int
+  balance       Int
+  expences      Expense[]
+  incomes       Income[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  owner  User? @relation(fields: [userId], references: [id])
+  userId Int?
+  @@map(name: "accounts")
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  reason    String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+  @@map(name: "expenses")
+}
+
+model Income {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  source    String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+  @@map(name: "incomes")
 }
