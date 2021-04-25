@@ -16,7 +16,7 @@ prefix-branch_name
 
 prefixes
   - doc-*
-  - bug-*
+  - fix-*
   - feat-*
 
 Example
