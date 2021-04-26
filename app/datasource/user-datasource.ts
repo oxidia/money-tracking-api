@@ -6,10 +6,19 @@ export default class UserDataSource extends PrismaDataSource {
     super(prismaClient);
   }
 
-  findUserById(id: number, select?: any) {
+  findById(id: number, select?: any) {
     return this._prismaClient.user.findUnique({
       where: { id },
       select
+    });
+  }
+
+  create(email: string, password: string) {
+    return this._prismaClient.user.create({
+      data: {
+        email,
+        password
+      }
     });
   }
 }
