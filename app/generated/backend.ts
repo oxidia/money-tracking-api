@@ -24,6 +24,7 @@ export enum CacheControlScope {
 export type Mutation = {
   __typename?: 'Mutation';
   signup: User;
+  signin: Token;
 };
 
 
@@ -32,9 +33,20 @@ export type MutationSignupArgs = {
   password: Scalars['String'];
 };
 
+
+export type MutationSigninArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   version: Scalars['String'];
+};
+
+export type Token = {
+  __typename?: 'Token';
+  accessToken: Scalars['String'];
 };
 
 
@@ -126,6 +138,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Query: ResolverTypeWrapper<{}>;
+  Token: ResolverTypeWrapper<Token>;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -137,6 +150,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars['String'];
   Query: {};
+  Token: Token;
   Upload: Scalars['Upload'];
   User: User;
   Int: Scalars['Int'];
@@ -150,10 +164,16 @@ export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Arg
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
+  signin?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'email' | 'password'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -169,6 +189,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Token?: TokenResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
 };
