@@ -17,5 +17,6 @@ export default gql`
 
   type Query {
     version: String!
+    me: User!
   }
 `;
