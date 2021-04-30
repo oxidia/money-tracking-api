@@ -42,6 +42,7 @@ export type MutationSigninArgs = {
 export type Query = {
   __typename?: 'Query';
   version: Scalars['String'];
+  me: User;
 };
 
 export type Token = {
@@ -169,6 +170,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {

@@ -4,6 +4,7 @@ import { AuthenticationError, UserInputError } from "apollo-server";
 import { Resolvers } from "../generated/backend";
 import UserDataSource from "../datasource/user-datasource";
 import { signupSchema, signinSchema } from "../joi-schemes/user-schemes";
+import { App } from "../types/app";
 
 type DataSource = {
   user: UserDataSource;
@@ -11,12 +12,20 @@ type DataSource = {
 
 type UserContext = {
   dataSources: DataSource;
+  isAuth: () => App.JWTPayload;
 };
 
 const resolvers: Resolvers = {
   Query: {
     version: function version() {
       return "1.0.0";
+    },
+    async me(_, __, { dataSources, isAuth }: UserContext) {
+      const jwtPayload = isAuth();
+
+      const user = await dataSources.user.findById(jwtPayload.userId);
+
+      return user;
     }
   },
   Mutation: {
