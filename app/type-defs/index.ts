@@ -26,5 +26,7 @@ export default gql`
   type Query {
     version: String!
     me: User!
+    account(accountId: Int!): Account
+    accounts: [Account]
   }
 `;

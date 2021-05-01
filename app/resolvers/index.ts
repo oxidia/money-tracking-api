@@ -29,6 +29,25 @@ const resolvers: Resolvers = {
       const user = await dataSources.user.findById(jwtPayload.userId);
 
       return user;
+    },
+    async account(_, { accountId }, { dataSources, isAuth }: UserContext) {
+      const jwtPayload = isAuth();
+
+      const account = await dataSources.account.findUserAccount(
+        accountId,
+        jwtPayload.userId
+      );
+
+      return account;
+    },
+    async accounts(_, __, { dataSources, isAuth }: UserContext) {
+      const jwtPayload = isAuth();
+
+      const accounts = await dataSources.account.findUserAccounts(
+        jwtPayload.userId
+      );
+
+      return accounts;
     }
   },
   Mutation: {

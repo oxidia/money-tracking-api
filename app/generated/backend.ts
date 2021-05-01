@@ -58,6 +58,13 @@ export type Query = {
   __typename?: 'Query';
   version: Scalars['String'];
   me: User;
+  account?: Maybe<Account>;
+  accounts?: Maybe<Array<Maybe<Account>>>;
+};
+
+
+export type QueryAccountArgs = {
+  accountId: Scalars['Int'];
 };
 
 export type Token = {
@@ -197,6 +204,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  account?: Resolver<Maybe<ResolversTypes['Account']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
+  accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
