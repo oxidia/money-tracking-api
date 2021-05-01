@@ -4,10 +4,13 @@ import { AuthenticationError, UserInputError } from "apollo-server";
 import { Resolvers } from "../generated/backend";
 import UserDataSource from "../datasource/user-datasource";
 import { signupSchema, signinSchema } from "../joi-schemes/user-schemes";
+import { createAccountSchema } from "../joi-schemes/account-schemes";
 import { App } from "../types/app";
+import AccountDataSource from "app/datasource/account-datasource";
 
 type DataSource = {
   user: UserDataSource;
+  account: AccountDataSource;
 };
 
 type UserContext = {
@@ -75,6 +78,31 @@ const resolvers: Resolvers = {
       const hashedPassword = bcrypt.hashSync(value.password, 10);
 
       return dataSources.user.create(value.email, hashedPassword);
+    },
+
+    createAccount(
+      _,
+      { bankName, accountNumber },
+      { dataSources, isAuth }: UserContext
+    ) {
+      const jwtPayload = isAuth();
+      const { value, error } = createAccountSchema.validate(
+        {
+          bankName,
+          accountNumber
+        },
+        { abortEarly: false }
+      );
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      return dataSources.account.create(
+        jwtPayload.userId,
+        value.bankName,
+        value.accountNumber
+      );
     }
   }
 };
