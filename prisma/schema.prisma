@@ -21,8 +21,8 @@ model User {
 model Account {
   id            Int       @id @default(autoincrement())
   bankName      String    @db.VarChar(255)
-  accountNumber Int
-  balance       Int
+  accountNumber String    @db.VarChar(255)
+  balance       Int?      @default(0)
   expences      Expense[]
   incomes       Income[]
   createdAt     DateTime  @default(now())

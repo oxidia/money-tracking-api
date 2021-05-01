@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import typeDefs from "./type-defs";
 import resolvers from "./resolvers";
 import UserDataSource from "./datasource/user-datasource";
+import AccountDataSource from "./datasource/account-datasource";
 import { App } from "./types/app";
 
 config();
@@ -42,7 +43,8 @@ const server = new ApolloServer({
     const prisma = new PrismaClient();
 
     return {
-      user: new UserDataSource(prisma)
+      user: new UserDataSource(prisma),
+      account: new AccountDataSource(prisma)
     };
   }
 });
