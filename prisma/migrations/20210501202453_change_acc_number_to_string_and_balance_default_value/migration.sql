@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "accounts" ALTER COLUMN "accountNumber" SET DATA TYPE VARCHAR(255),
+ALTER COLUMN "balance" DROP NOT NULL,
+ALTER COLUMN "balance" SET DEFAULT 0;
