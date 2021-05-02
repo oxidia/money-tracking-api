@@ -29,11 +29,19 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Income = {
+  __typename?: 'Income';
+  id: Scalars['Int'];
+  amount: Scalars['Int'];
+  source: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   signup: User;
   signin: Token;
   createAccount: Account;
+  addIncome: Income;
 };
 
 
@@ -52,6 +60,13 @@ export type MutationSigninArgs = {
 export type MutationCreateAccountArgs = {
   bankName?: Maybe<Scalars['String']>;
   accountNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationAddIncomeArgs = {
+  accountId: Scalars['Int'];
+  amount: Scalars['Int'];
+  source: Scalars['String'];
 };
 
 export type Query = {
@@ -161,6 +176,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   CacheControlScope: CacheControlScope;
+  Income: ResolverTypeWrapper<Income>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
@@ -174,6 +190,7 @@ export type ResolversParentTypes = {
   Account: Account;
   Int: Scalars['Int'];
   String: Scalars['String'];
+  Income: Income;
   Mutation: {};
   Query: {};
   Token: Token;
@@ -195,10 +212,18 @@ export type AccountResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IncomeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Income'] = ResolversParentTypes['Income']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
   signin?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'email' | 'password'>>;
   createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, never>>;
+  addIncome?: Resolver<ResolversTypes['Income'], ParentType, ContextType, RequireFields<MutationAddIncomeArgs, 'accountId' | 'amount' | 'source'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -225,6 +250,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   Account?: AccountResolvers<ContextType>;
+  Income?: IncomeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
