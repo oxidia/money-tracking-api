@@ -6,6 +6,7 @@ import typeDefs from "./type-defs";
 import resolvers from "./resolvers";
 import UserDataSource from "./datasource/user-datasource";
 import AccountDataSource from "./datasource/account-datasource";
+import IncomeDataSource from "./datasource/income-datasource";
 import { App } from "./types/app";
 
 config();
@@ -44,7 +45,8 @@ const server = new ApolloServer({
 
     return {
       user: new UserDataSource(prisma),
-      account: new AccountDataSource(prisma)
+      account: new AccountDataSource(prisma),
+      income: new IncomeDataSource(prisma)
     };
   }
 });
