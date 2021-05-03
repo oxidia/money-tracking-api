@@ -6,7 +6,7 @@ export default class IncomeDataSource extends PrismaDataSource {
     super(prismaClient);
   }
 
-  getAccountIcome(incomeId: number, accountId: number): any {
+  findAccountIcome(incomeId: number, accountId: number): any {
     return this._prismaClient.income.findFirst({
       where: {
         id: incomeId,

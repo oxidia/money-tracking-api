@@ -86,7 +86,7 @@ const resolvers: Resolvers = {
         return null;
       }
 
-      const income = await dataSources.income.getAccountIcome(
+      const income = await dataSources.income.findAccountIcome(
         value.incomeId,
         value.accountId
       );
