@@ -11,6 +11,8 @@ import { App } from "./types/app";
 
 config();
 
+const prisma = new PrismaClient();
+
 const server = new ApolloServer({
   typeDefs: typeDefs,
   resolvers,
@@ -41,8 +43,6 @@ const server = new ApolloServer({
   },
 
   dataSources() {
-    const prisma = new PrismaClient();
-
     return {
       user: new UserDataSource(prisma),
       account: new AccountDataSource(prisma),
