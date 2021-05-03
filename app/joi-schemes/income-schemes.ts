@@ -10,3 +10,7 @@ export const incomeSchema = Joi.object({
   incomeId: Joi.number().integer().min(1).required(),
   accountId: Joi.number().integer().min(1).required()
 });
+
+export const incomesSchema = Joi.object({
+  accountId: Joi.number().integer().min(1).required()
+});

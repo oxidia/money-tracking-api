@@ -15,6 +15,14 @@ export default class IncomeDataSource extends PrismaDataSource {
     });
   }
 
+  findAccountIcomes(accountId: number): any {
+    return this._prismaClient.income.findMany({
+      where: {
+        accountId
+      }
+    });
+  }
+
   create(accountId: number, amount: number, source: string): any {
     return this._prismaClient.income.create({
       data: {
