@@ -8,7 +8,7 @@ import {
 import { Resolvers } from "../generated/backend";
 import { signupSchema, signinSchema } from "../joi-schemes/user-schemes";
 import { createAccountSchema } from "../joi-schemes/account-schemes";
-import { addIncomeSchema } from "../joi-schemes/income-schemes";
+import { addIncomeSchema, incomeSchema } from "../joi-schemes/income-schemes";
 import { App } from "../types/app";
 import UserDataSource from "../datasource/user-datasource";
 import AccountDataSource from "app/datasource/account-datasource";
@@ -58,6 +58,40 @@ const resolvers: Resolvers = {
       );
 
       return accounts;
+    },
+
+    async income(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { incomeId, accountId } = args;
+      const { userId } = isAuth();
+
+      const { value, error } = incomeSchema.validate(
+        {
+          incomeId,
+          accountId
+        },
+        { abortEarly: false }
+      );
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return null;
+      }
+
+      const income = await dataSources.income.getAccountIcome(
+        value.incomeId,
+        value.accountId
+      );
+
+      return income;
     }
   },
   Mutation: {

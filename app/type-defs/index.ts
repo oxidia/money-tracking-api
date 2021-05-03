@@ -35,5 +35,6 @@ export default gql`
     me: User!
     account(accountId: Int!): Account
     accounts: [Account]
+    income(incomeId: Int!, accountId: Int!): Income
   }
 `;

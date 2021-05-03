@@ -75,10 +75,17 @@ export type Query = {
   me: User;
   account?: Maybe<Account>;
   accounts?: Maybe<Array<Maybe<Account>>>;
+  income?: Maybe<Income>;
 };
 
 
 export type QueryAccountArgs = {
+  accountId: Scalars['Int'];
+};
+
+
+export type QueryIncomeArgs = {
+  incomeId: Scalars['Int'];
   accountId: Scalars['Int'];
 };
 
@@ -231,6 +238,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   account?: Resolver<Maybe<ResolversTypes['Account']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
+  income?: Resolver<Maybe<ResolversTypes['Income']>, ParentType, ContextType, RequireFields<QueryIncomeArgs, 'incomeId' | 'accountId'>>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
