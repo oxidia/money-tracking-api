@@ -25,17 +25,12 @@ type UserContext = {
   isAuth: () => App.JWTPayload;
 };
 
-type IncomeInput = {
-  accountId: number;
-  amount: number;
-  source: string;
-};
-
 const resolvers: Resolvers = {
   Query: {
     version: function version() {
       return "1.0.0";
     },
+
     async me(_, __, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -43,6 +38,7 @@ const resolvers: Resolvers = {
 
       return user;
     },
+
     async account(_, { accountId }, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -53,6 +49,7 @@ const resolvers: Resolvers = {
 
       return account;
     },
+
     async accounts(_, __, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -137,7 +134,7 @@ const resolvers: Resolvers = {
       );
     },
 
-    async addIncome(_, args: IncomeInput, context: UserContext) {
+    async addIncome(_, args, context: UserContext) {
       const { dataSources, isAuth } = context;
       const { accountId, amount, source } = args;
       const { userId } = isAuth();
