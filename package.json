@@ -8,7 +8,11 @@
     "start": "npm run build && node build/index.js",
     "dev": "nodemon",
     "build": "rimraf ./build && tsc",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "docker:dev": "docker-compose up -d",
+    "docker:log": "docker-compose logs -f mt-api",
+    "docker:exec": "docker-compose exec mt-api bash",
+    "docker:stop": "docker-compose stop"
   },
   "repository": {
     "type": "git",
