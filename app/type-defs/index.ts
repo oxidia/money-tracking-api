@@ -13,6 +13,12 @@ export default gql`
     balance: Int!
   }
 
+  type Income {
+    id: Int!
+    amount: Int!
+    source: String!
+  }
+
   type Token {
     accessToken: String!
   }
@@ -21,6 +27,7 @@ export default gql`
     signup(email: String!, password: String!): User!
     signin(email: String!, password: String!): Token!
     createAccount(bankName: String, accountNumber: String): Account!
+    addIncome(accountId: Int!, amount: Int!, source: String!): Income!
   }
 
   type Query {
@@ -28,5 +35,7 @@ export default gql`
     me: User!
     account(accountId: Int!): Account
     accounts: [Account]
+    income(incomeId: Int!, accountId: Int!): Income
+    incomes(accountId: Int!): [Income!]!
   }
 `;

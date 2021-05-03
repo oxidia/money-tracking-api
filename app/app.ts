@@ -6,9 +6,12 @@ import typeDefs from "./type-defs";
 import resolvers from "./resolvers";
 import UserDataSource from "./datasource/user-datasource";
 import AccountDataSource from "./datasource/account-datasource";
+import IncomeDataSource from "./datasource/income-datasource";
 import { App } from "./types/app";
 
 config();
+
+const prisma = new PrismaClient();
 
 const server = new ApolloServer({
   typeDefs: typeDefs,
@@ -40,11 +43,10 @@ const server = new ApolloServer({
   },
 
   dataSources() {
-    const prisma = new PrismaClient();
-
     return {
       user: new UserDataSource(prisma),
-      account: new AccountDataSource(prisma)
+      account: new AccountDataSource(prisma),
+      income: new IncomeDataSource(prisma)
     };
   }
 });

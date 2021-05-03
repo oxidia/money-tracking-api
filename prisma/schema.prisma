@@ -28,8 +28,8 @@ model Account {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  owner  User? @relation(fields: [userId], references: [id])
-  userId Int?
+  owner  User @relation(fields: [userId], references: [id])
+  userId Int
   @@map(name: "accounts")
 }
 
@@ -40,8 +40,8 @@ model Expense {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  account   Account? @relation(fields: [accountId], references: [id])
-  accountId Int?
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
   @@map(name: "expenses")
 }
 
@@ -52,7 +52,7 @@ model Income {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  account   Account? @relation(fields: [accountId], references: [id])
-  accountId Int?
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
   @@map(name: "incomes")
 }

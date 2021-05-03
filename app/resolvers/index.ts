@@ -1,16 +1,27 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { AuthenticationError, UserInputError } from "apollo-server";
+import {
+  AuthenticationError,
+  ForbiddenError,
+  UserInputError
+} from "apollo-server";
 import { Resolvers } from "../generated/backend";
-import UserDataSource from "../datasource/user-datasource";
 import { signupSchema, signinSchema } from "../joi-schemes/user-schemes";
 import { createAccountSchema } from "../joi-schemes/account-schemes";
+import {
+  addIncomeSchema,
+  incomeSchema,
+  incomesSchema
+} from "../joi-schemes/income-schemes";
 import { App } from "../types/app";
+import UserDataSource from "../datasource/user-datasource";
 import AccountDataSource from "app/datasource/account-datasource";
+import IncomeDataSource from "app/datasource/income-datasource";
 
 type DataSource = {
   user: UserDataSource;
   account: AccountDataSource;
+  income: IncomeDataSource;
 };
 
 type UserContext = {
@@ -23,6 +34,7 @@ const resolvers: Resolvers = {
     version: function version() {
       return "1.0.0";
     },
+
     async me(_, __, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -30,6 +42,7 @@ const resolvers: Resolvers = {
 
       return user;
     },
+
     async account(_, { accountId }, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -40,6 +53,7 @@ const resolvers: Resolvers = {
 
       return account;
     },
+
     async accounts(_, __, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
@@ -48,6 +62,61 @@ const resolvers: Resolvers = {
       );
 
       return accounts;
+    },
+
+    async income(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { value, error } = incomeSchema.validate(args, {
+        abortEarly: false
+      });
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return null;
+      }
+
+      const income = await dataSources.income.findAccountincome(
+        value.incomeId,
+        value.accountId
+      );
+
+      return income;
+    },
+
+    async incomes(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { error, value } = incomesSchema.validate(args);
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return [];
+      }
+
+      const incomes = await dataSources.income.findAccountincomes(
+        value.accountId
+      );
+
+      return incomes;
     }
   },
   Mutation: {
@@ -122,6 +191,40 @@ const resolvers: Resolvers = {
         value.bankName,
         value.accountNumber
       );
+    },
+
+    async addIncome(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { accountId, amount, source } = args;
+      const { userId } = isAuth();
+
+      const { value, error } = addIncomeSchema.validate(
+        {
+          accountId,
+          amount,
+          source
+        },
+        { abortEarly: false }
+      );
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        throw new ForbiddenError(
+          "account does not exists or your don't have permission"
+        );
+      }
+
+      const income = await dataSources.income.create(accountId, amount, source);
+
+      return income;
     }
   }
 };

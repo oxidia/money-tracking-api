@@ -29,11 +29,19 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Income = {
+  __typename?: 'Income';
+  id: Scalars['Int'];
+  amount: Scalars['Int'];
+  source: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   signup: User;
   signin: Token;
   createAccount: Account;
+  addIncome: Income;
 };
 
 
@@ -54,16 +62,36 @@ export type MutationCreateAccountArgs = {
   accountNumber?: Maybe<Scalars['String']>;
 };
 
+
+export type MutationAddIncomeArgs = {
+  accountId: Scalars['Int'];
+  amount: Scalars['Int'];
+  source: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   version: Scalars['String'];
   me: User;
   account?: Maybe<Account>;
   accounts?: Maybe<Array<Maybe<Account>>>;
+  income?: Maybe<Income>;
+  incomes: Array<Income>;
 };
 
 
 export type QueryAccountArgs = {
+  accountId: Scalars['Int'];
+};
+
+
+export type QueryIncomeArgs = {
+  incomeId: Scalars['Int'];
+  accountId: Scalars['Int'];
+};
+
+
+export type QueryIncomesArgs = {
   accountId: Scalars['Int'];
 };
 
@@ -161,6 +189,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   CacheControlScope: CacheControlScope;
+  Income: ResolverTypeWrapper<Income>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
@@ -174,6 +203,7 @@ export type ResolversParentTypes = {
   Account: Account;
   Int: Scalars['Int'];
   String: Scalars['String'];
+  Income: Income;
   Mutation: {};
   Query: {};
   Token: Token;
@@ -195,10 +225,18 @@ export type AccountResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IncomeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Income'] = ResolversParentTypes['Income']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
   signin?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'email' | 'password'>>;
   createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, never>>;
+  addIncome?: Resolver<ResolversTypes['Income'], ParentType, ContextType, RequireFields<MutationAddIncomeArgs, 'accountId' | 'amount' | 'source'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -206,6 +244,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   account?: Resolver<Maybe<ResolversTypes['Account']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
+  income?: Resolver<Maybe<ResolversTypes['Income']>, ParentType, ContextType, RequireFields<QueryIncomeArgs, 'incomeId' | 'accountId'>>;
+  incomes?: Resolver<Array<ResolversTypes['Income']>, ParentType, ContextType, RequireFields<QueryIncomesArgs, 'accountId'>>;
 };
 
 export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
@@ -225,6 +265,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   Account?: AccountResolvers<ContextType>;
+  Income?: IncomeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
