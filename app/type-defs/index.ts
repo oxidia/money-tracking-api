@@ -45,5 +45,6 @@ export default gql`
     income(incomeId: Int!, accountId: Int!): Income
     incomes(accountId: Int!): [Income!]!
     expense(expenseId: Int!, accountId: Int!): Expense
+    expenses(accountId: Int!): [Expense!]!
   }
 `;

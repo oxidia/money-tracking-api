@@ -19,7 +19,8 @@ import AccountDataSource from "app/datasource/account-datasource";
 import IncomeDataSource from "app/datasource/income-datasource";
 import {
   addExpenseSchema,
-  expenseSchema
+  expenseSchema,
+  expensesSchema
 } from "../joi-schemes/expense-schemes";
 import ExpenseDataSource from "app/datasource/expense-datasource";
 
@@ -152,6 +153,32 @@ const resolvers: Resolvers = {
       );
 
       return expense;
+    },
+
+    async expenses(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { error, value } = expensesSchema.validate(args);
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return [];
+      }
+
+      const expenses = await dataSources.expense.findAccountExpenses(
+        value.accountId
+      );
+
+      return expenses;
     }
   },
   Mutation: {

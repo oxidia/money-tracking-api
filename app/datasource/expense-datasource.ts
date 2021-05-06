@@ -15,6 +15,14 @@ export default class ExpenseDataSource extends PrismaDataSource {
     });
   }
 
+  findAccountExpenses(accountId: number): any {
+    return this._prismaClient.expense.findMany({
+      where: {
+        accountId
+      }
+    });
+  }
+
   create(accountId: number, amount: number, reason: string): any {
     return this._prismaClient.expense.create({
       data: {

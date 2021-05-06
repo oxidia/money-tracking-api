@@ -10,3 +10,7 @@ export const expenseSchema = Joi.object({
   expenseId: Joi.number().integer().min(1).required(),
   accountId: Joi.number().integer().min(1).required()
 });
+
+export const expensesSchema = Joi.object({
+  accountId: Joi.number().integer().min(1).required()
+});
