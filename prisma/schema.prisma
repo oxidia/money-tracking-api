@@ -23,7 +23,7 @@ model Account {
   bankName      String    @db.VarChar(255)
   accountNumber String    @db.VarChar(255)
   balance       Int?      @default(0)
-  expences      Expense[]
+  expenses      Expense[]
   incomes       Income[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

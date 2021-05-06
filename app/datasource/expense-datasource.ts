@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import PrismaDataSource from "./prisma-datasource";
 
-export default class ExpenceDataSource extends PrismaDataSource {
+export default class ExpenseDataSource extends PrismaDataSource {
   constructor(prismaClient: PrismaClient) {
     super(prismaClient);
   }

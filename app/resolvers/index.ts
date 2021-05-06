@@ -17,14 +17,14 @@ import { App } from "../types/app";
 import UserDataSource from "../datasource/user-datasource";
 import AccountDataSource from "app/datasource/account-datasource";
 import IncomeDataSource from "app/datasource/income-datasource";
-import { addExpenceSchema } from "../joi-schemes/expence-schemes";
-import ExpenceDataSource from "app/datasource/expence-datasource";
+import { addExpenseSchema } from "../joi-schemes/expense-schemes";
+import ExpenseDataSource from "app/datasource/expense-datasource";
 
 type DataSource = {
   user: UserDataSource;
   account: AccountDataSource;
   income: IncomeDataSource;
-  expense: ExpenceDataSource;
+  expense: ExpenseDataSource;
 };
 
 type UserContext = {
@@ -235,7 +235,7 @@ const resolvers: Resolvers = {
       const { accountId, amount, reason } = args;
       const { userId } = isAuth();
 
-      const { value, error } = addExpenceSchema.validate(
+      const { value, error } = addExpenseSchema.validate(
         {
           accountId,
           amount,
