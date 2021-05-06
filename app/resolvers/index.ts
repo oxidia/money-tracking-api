@@ -17,7 +17,10 @@ import { App } from "../types/app";
 import UserDataSource from "../datasource/user-datasource";
 import AccountDataSource from "app/datasource/account-datasource";
 import IncomeDataSource from "app/datasource/income-datasource";
-import { addExpenseSchema } from "../joi-schemes/expense-schemes";
+import {
+  addExpenseSchema,
+  expenseSchema
+} from "../joi-schemes/expense-schemes";
 import ExpenseDataSource from "app/datasource/expense-datasource";
 
 type DataSource = {
@@ -120,6 +123,35 @@ const resolvers: Resolvers = {
       );
 
       return incomes;
+    },
+
+    async expense(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { value, error } = expenseSchema.validate(args, {
+        abortEarly: false
+      });
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return null;
+      }
+
+      const expense = await dataSources.expense.findAccountExpense(
+        value.expenseId,
+        value.accountId
+      );
+
+      return expense;
     }
   },
   Mutation: {
