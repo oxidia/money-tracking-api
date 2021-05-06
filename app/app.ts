@@ -8,6 +8,7 @@ import UserDataSource from "./datasource/user-datasource";
 import AccountDataSource from "./datasource/account-datasource";
 import IncomeDataSource from "./datasource/income-datasource";
 import { App } from "./types/app";
+import ExpenceDataSource from "./datasource/expence-datasource";
 
 config();
 
@@ -46,7 +47,8 @@ const server = new ApolloServer({
     return {
       user: new UserDataSource(prisma),
       account: new AccountDataSource(prisma),
-      income: new IncomeDataSource(prisma)
+      income: new IncomeDataSource(prisma),
+      expense: new ExpenceDataSource(prisma)
     };
   }
 });
