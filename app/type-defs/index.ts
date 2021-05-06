@@ -19,6 +19,12 @@ export default gql`
     source: String!
   }
 
+  type Expense {
+    id: Int!
+    amount: Int!
+    reason: String!
+  }
+
   type Token {
     accessToken: String!
   }
@@ -28,6 +34,7 @@ export default gql`
     signin(email: String!, password: String!): Token!
     createAccount(bankName: String, accountNumber: String): Account!
     addIncome(accountId: Int!, amount: Int!, source: String!): Income!
+    addExpense(accountId: Int!, amount: Int!, reason: String!): Expense!
   }
 
   type Query {
@@ -37,5 +44,7 @@ export default gql`
     accounts: [Account]
     income(incomeId: Int!, accountId: Int!): Income
     incomes(accountId: Int!): [Income!]!
+    expense(expenseId: Int!, accountId: Int!): Expense
+    expenses(accountId: Int!): [Expense!]!
   }
 `;

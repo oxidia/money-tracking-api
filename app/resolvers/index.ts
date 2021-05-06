@@ -17,11 +17,18 @@ import { App } from "../types/app";
 import UserDataSource from "../datasource/user-datasource";
 import AccountDataSource from "app/datasource/account-datasource";
 import IncomeDataSource from "app/datasource/income-datasource";
+import {
+  addExpenseSchema,
+  expenseSchema,
+  expensesSchema
+} from "../joi-schemes/expense-schemes";
+import ExpenseDataSource from "app/datasource/expense-datasource";
 
 type DataSource = {
   user: UserDataSource;
   account: AccountDataSource;
   income: IncomeDataSource;
+  expense: ExpenseDataSource;
 };
 
 type UserContext = {
@@ -117,6 +124,61 @@ const resolvers: Resolvers = {
       );
 
       return incomes;
+    },
+
+    async expense(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { value, error } = expenseSchema.validate(args, {
+        abortEarly: false
+      });
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return null;
+      }
+
+      const expense = await dataSources.expense.findAccountExpense(
+        value.expenseId,
+        value.accountId
+      );
+
+      return expense;
+    },
+
+    async expenses(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { userId } = isAuth();
+
+      const { error, value } = expensesSchema.validate(args);
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        return [];
+      }
+
+      const expenses = await dataSources.expense.findAccountExpenses(
+        value.accountId
+      );
+
+      return expenses;
     }
   },
   Mutation: {
@@ -225,6 +287,44 @@ const resolvers: Resolvers = {
       const income = await dataSources.income.create(accountId, amount, source);
 
       return income;
+    },
+
+    async addExpense(_, args, context: UserContext) {
+      const { dataSources, isAuth } = context;
+      const { accountId, amount, reason } = args;
+      const { userId } = isAuth();
+
+      const { value, error } = addExpenseSchema.validate(
+        {
+          accountId,
+          amount,
+          reason
+        },
+        { abortEarly: false }
+      );
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
+      const account = await dataSources.account.findUserAccount(
+        value.accountId,
+        userId
+      );
+
+      if (!account) {
+        throw new ForbiddenError(
+          "account does not exists or your don't have permission"
+        );
+      }
+
+      const expense = await dataSources.expense.create(
+        accountId,
+        amount,
+        reason
+      );
+
+      return expense;
     }
   }
 };
