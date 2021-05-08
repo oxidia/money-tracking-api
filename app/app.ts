@@ -7,8 +7,9 @@ import resolvers from "./resolvers";
 import UserDataSource from "./datasource/user-datasource";
 import AccountDataSource from "./datasource/account-datasource";
 import IncomeDataSource from "./datasource/income-datasource";
-import { App } from "./types/app";
 import ExpenseDataSource from "./datasource/expense-datasource";
+import { ScalarDate } from "./scalar-types";
+import { App } from "./types/app";
 
 config();
 
@@ -16,7 +17,7 @@ const prisma = new PrismaClient();
 
 const server = new ApolloServer({
   typeDefs: typeDefs,
-  resolvers,
+  resolvers: [ScalarDate, resolvers],
 
   context({ req }) {
     const authHeader = req.header("authorization");

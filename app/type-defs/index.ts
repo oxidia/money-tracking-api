@@ -1,9 +1,13 @@
 import { gql } from "apollo-server";
 
 export default gql`
+  scalar Date
+
   type User {
     id: Int!
     email: String!
+    createdAt: Date!
+    updatedAt: Date!
   }
 
   type Account {
@@ -11,18 +15,24 @@ export default gql`
     bankName: String!
     accountNumber: String!
     balance: Int!
+    createdAt: Date!
+    updatedAt: Date!
   }
 
   type Income {
     id: Int!
     amount: Int!
     source: String!
+    createdAt: Date!
+    updatedAt: Date!
   }
 
   type Expense {
     id: Int!
     amount: Int!
     reason: String!
+    createdAt: Date!
+    updatedAt: Date!
   }
 
   type Token {
