@@ -75,8 +75,8 @@ export type MutationSigninArgs = {
 
 
 export type MutationCreateAccountArgs = {
-  bankName?: Maybe<Scalars['String']>;
-  accountNumber?: Maybe<Scalars['String']>;
+  bankName: Scalars['String'];
+  accountNumber: Scalars['String'];
 };
 
 
@@ -295,7 +295,7 @@ export type IncomeResolvers<ContextType = any, ParentType extends ResolversParen
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
   signin?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'email' | 'password'>>;
-  createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, never>>;
+  createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'bankName' | 'accountNumber'>>;
   addIncome?: Resolver<ResolversTypes['Income'], ParentType, ContextType, RequireFields<MutationAddIncomeArgs, 'accountId' | 'amount' | 'source'>>;
   addExpense?: Resolver<ResolversTypes['Expense'], ParentType, ContextType, RequireFields<MutationAddExpenseArgs, 'accountId' | 'amount' | 'reason'>>;
 };

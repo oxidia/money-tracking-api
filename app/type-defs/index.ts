@@ -42,7 +42,7 @@ export default gql`
   type Mutation {
     signup(email: String!, password: String!): User!
     signin(email: String!, password: String!): Token!
-    createAccount(bankName: String, accountNumber: String): Account!
+    createAccount(bankName: String!, accountNumber: String!): Account!
     addIncome(accountId: Int!, amount: Int!, source: String!): Income!
     addExpense(accountId: Int!, amount: Int!, reason: String!): Expense!
   }
