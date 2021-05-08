@@ -23,13 +23,30 @@ export default class ExpenseDataSource extends PrismaDataSource {
     });
   }
 
-  create(accountId: number, amount: number, reason: string): any {
-    return this._prismaClient.expense.create({
-      data: {
-        accountId,
-        amount,
-        reason
-      }
-    });
+  async create(
+    accountId: number,
+    amount: number,
+    reason: string
+  ): Promise<any> {
+    const [_, expense] = await this._prismaClient.$transaction([
+      this._prismaClient.account.update({
+        where: {
+          id: accountId
+        },
+        data: {
+          balance: {
+            decrement: amount
+          }
+        }
+      }),
+      this._prismaClient.expense.create({
+        data: {
+          accountId,
+          amount,
+          reason
+        }
+      })
+    ]);
+    return expense;
   }
 }
