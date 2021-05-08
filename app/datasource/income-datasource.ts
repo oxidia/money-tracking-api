@@ -23,13 +23,30 @@ export default class IncomeDataSource extends PrismaDataSource {
     });
   }
 
-  create(accountId: number, amount: number, source: string): any {
-    return this._prismaClient.income.create({
-      data: {
-        accountId,
-        amount,
-        source
-      }
-    });
+  async create(
+    accountId: number,
+    amount: number,
+    source: string
+  ): Promise<any> {
+    const [_, income] = await this._prismaClient.$transaction([
+      this._prismaClient.account.update({
+        where: {
+          id: accountId
+        },
+        data: {
+          balance: {
+            increment: amount
+          }
+        }
+      }),
+      this._prismaClient.income.create({
+        data: {
+          accountId,
+          amount,
+          source
+        }
+      })
+    ]);
+    return income;
   }
 }
