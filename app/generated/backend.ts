@@ -11,6 +11,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Date custom scalar type */
+  Date: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -22,6 +24,8 @@ export type Account = {
   bankName: Scalars['String'];
   accountNumber: Scalars['String'];
   balance: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export enum CacheControlScope {
@@ -29,11 +33,14 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+
 export type Expense = {
   __typename?: 'Expense';
   id: Scalars['Int'];
   amount: Scalars['Int'];
   reason: Scalars['String'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export type Income = {
@@ -41,6 +48,8 @@ export type Income = {
   id: Scalars['Int'];
   amount: Scalars['Int'];
   source: Scalars['String'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export type Mutation = {
@@ -66,8 +75,8 @@ export type MutationSigninArgs = {
 
 
 export type MutationCreateAccountArgs = {
-  bankName?: Maybe<Scalars['String']>;
-  accountNumber?: Maybe<Scalars['String']>;
+  bankName: Scalars['String'];
+  accountNumber: Scalars['String'];
 };
 
 
@@ -133,6 +142,8 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Int'];
   email: Scalars['String'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 
@@ -217,6 +228,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   CacheControlScope: CacheControlScope;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   Expense: ResolverTypeWrapper<Expense>;
   Income: ResolverTypeWrapper<Income>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -232,6 +244,7 @@ export type ResolversParentTypes = {
   Account: Account;
   Int: Scalars['Int'];
   String: Scalars['String'];
+  Date: Scalars['Date'];
   Expense: Expense;
   Income: Income;
   Mutation: {};
@@ -252,13 +265,21 @@ export type AccountResolvers<ContextType = any, ParentType extends ResolversPare
   bankName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   accountNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type ExpenseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Expense'] = ResolversParentTypes['Expense']> = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   reason?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -266,13 +287,15 @@ export type IncomeResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
   signin?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'email' | 'password'>>;
-  createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, never>>;
+  createAccount?: Resolver<ResolversTypes['Account'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'bankName' | 'accountNumber'>>;
   addIncome?: Resolver<ResolversTypes['Income'], ParentType, ContextType, RequireFields<MutationAddIncomeArgs, 'accountId' | 'amount' | 'source'>>;
   addExpense?: Resolver<ResolversTypes['Expense'], ParentType, ContextType, RequireFields<MutationAddExpenseArgs, 'accountId' | 'amount' | 'reason'>>;
 };
@@ -300,11 +323,14 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Account?: AccountResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   Expense?: ExpenseResolvers<ContextType>;
   Income?: IncomeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
