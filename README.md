@@ -2,12 +2,13 @@
 
 ## Env variables
 
-| Name           | Required | Type      | Default value | Description |
-| -------------- | -------- | --------- | ------------- | ----------- |
-| `PORT`         | false    | `integer` | 3000          | -           |
-| `DB_PASSWORD`  | true     | `string`  | -             | -           |
-| `DB_NAME`      | true     | `string`  | -             | -           |
-| `DATABASE_URL` | true     | `string`  | -             | -           |
+| Name             | Required | Type      | Default value | Description |
+| ---------------- | -------- | --------- | ------------- | ----------- |
+| `PORT`           | true     | `integer` | -             | -           |
+| `DB_PASSWORD`    | true     | `string`  | -             | -           |
+| `DB_NAME`        | true     | `string`  | -             | -           |
+| `DATABASE_URL`   | true     | `string`  | -             | -           |
+| `JWT_SECRET_KEY` | true     | `string`  | -             | -           |
 
 ## Branch naming
 

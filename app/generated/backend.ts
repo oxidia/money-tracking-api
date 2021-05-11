@@ -20,7 +20,7 @@ export type Scalars = {
 
 export type Account = {
   __typename?: 'Account';
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   bankName: Scalars['String'];
   accountNumber: Scalars['String'];
   balance: Scalars['Int'];
@@ -36,7 +36,7 @@ export enum CacheControlScope {
 
 export type Expense = {
   __typename?: 'Expense';
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   amount: Scalars['Int'];
   reason: Scalars['String'];
   createdAt: Scalars['Date'];
@@ -45,7 +45,7 @@ export type Expense = {
 
 export type Income = {
   __typename?: 'Income';
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   amount: Scalars['Int'];
   source: Scalars['String'];
   createdAt: Scalars['Date'];
@@ -140,7 +140,7 @@ export type Token = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   email: Scalars['String'];
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
@@ -225,8 +225,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Account: ResolverTypeWrapper<Account>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   CacheControlScope: CacheControlScope;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Expense: ResolverTypeWrapper<Expense>;
@@ -242,8 +243,9 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Account: Account;
-  Int: Scalars['Int'];
+  ID: Scalars['ID'];
   String: Scalars['String'];
+  Int: Scalars['Int'];
   Date: Scalars['Date'];
   Expense: Expense;
   Income: Income;
@@ -261,7 +263,7 @@ export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   bankName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   accountNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -275,7 +277,7 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type ExpenseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Expense'] = ResolversParentTypes['Expense']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   reason?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -284,7 +286,7 @@ export type ExpenseResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type IncomeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Income'] = ResolversParentTypes['Income']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -321,7 +323,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
