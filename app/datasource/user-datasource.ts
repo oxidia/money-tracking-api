@@ -22,7 +22,7 @@ export default class UserDataSource extends PrismaDataSource {
     });
   }
 
-  create(email: string, password: string) {
+  create(email: string, password: string): any {
     return this._prismaClient.user.create({
       data: {
         email,
