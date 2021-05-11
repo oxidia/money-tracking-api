@@ -5,24 +5,33 @@ import {
   ForbiddenError,
   UserInputError
 } from "apollo-server";
+
 import { Resolvers } from "../generated/backend";
+
 import { signupSchema, signinSchema } from "../joi-schemes/user-schemes";
-import { createAccountSchema } from "../joi-schemes/account-schemes";
+import {
+  accountSchema,
+  createAccountSchema
+} from "../joi-schemes/account-schemes";
+
 import {
   addIncomeSchema,
   incomeSchema,
   incomesSchema
 } from "../joi-schemes/income-schemes";
-import { App } from "../types/app";
-import UserDataSource from "../datasource/user-datasource";
-import AccountDataSource from "app/datasource/account-datasource";
-import IncomeDataSource from "app/datasource/income-datasource";
+
 import {
   addExpenseSchema,
   expenseSchema,
   expensesSchema
 } from "../joi-schemes/expense-schemes";
+
+import UserDataSource from "../datasource/user-datasource";
+import AccountDataSource from "app/datasource/account-datasource";
+import IncomeDataSource from "app/datasource/income-datasource";
 import ExpenseDataSource from "app/datasource/expense-datasource";
+
+import { App } from "../types/app";
 
 type DataSource = {
   user: UserDataSource;
@@ -50,11 +59,19 @@ const resolvers: Resolvers = {
       return user;
     },
 
-    async account(_, { accountId }, { dataSources, isAuth }: UserContext) {
+    async account(_, args, { dataSources, isAuth }: UserContext) {
       const jwtPayload = isAuth();
 
+      const { value, error } = accountSchema.validate(args, {
+        abortEarly: false
+      });
+
+      if (error) {
+        throw new UserInputError(error.message, { details: error.details });
+      }
+
       const account = await dataSources.account.findUserAccount(
-        accountId,
+        value.accountId,
         jwtPayload.userId
       );
 
@@ -284,24 +301,22 @@ const resolvers: Resolvers = {
         );
       }
 
-      const income = await dataSources.income.create(accountId, amount, source);
+      const income = await dataSources.income.create(
+        value.accountId,
+        amount,
+        source
+      );
 
       return income;
     },
 
     async addExpense(_, args, context: UserContext) {
       const { dataSources, isAuth } = context;
-      const { accountId, amount, reason } = args;
       const { userId } = isAuth();
 
-      const { value, error } = addExpenseSchema.validate(
-        {
-          accountId,
-          amount,
-          reason
-        },
-        { abortEarly: false }
-      );
+      const { value, error } = addExpenseSchema.validate(args, {
+        abortEarly: false
+      });
 
       if (error) {
         throw new UserInputError(error.message, { details: error.details });
@@ -319,9 +334,9 @@ const resolvers: Resolvers = {
       }
 
       const expense = await dataSources.expense.create(
-        accountId,
-        amount,
-        reason
+        value.accountId,
+        value.amount,
+        value.reason
       );
 
       return expense;
